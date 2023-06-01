@@ -13,13 +13,13 @@ public class DijkstraAlgorithm {
         dist[startNode] = 0;
 
         for (int i = 0; i < numNodes - 1; i++) {
-            int Node = findMinDistance(dist, visited);
-            visited[Node] = true;
+            int minDistNode = findMinDistance(dist, visited);
+            visited[minDistNode] = true;
 
             for (int j = 0; j < numNodes; j++) {
-                if (!visited[j] && graph[Node][j] != 0 && dist[Node] != INF &&
-                        dist[Node] + graph[Node][j] < dist[j]) {
-                    dist[j] = dist[Node] + graph[Node][j];
+                if (!visited[j] && graph[minDistNode][j] != 0 && dist[minDistNode] != INF &&
+                        dist[minDistNode] + graph[minDistNode][j] < dist[j]) {
+                    dist[j] = dist[minDistNode] + graph[minDistNode][j];
                 }
             }
         }
@@ -32,34 +32,43 @@ public class DijkstraAlgorithm {
 
     private static int findMinDistance(int[] dist, boolean[] visited) {
         int minDist = INF;
-        int Node = -1;
+        int minDistNode = -1;
 
         for (int i = 0; i < dist.length; i++) {
             if (!visited[i] && dist[i] < minDist) {
                 minDist = dist[i];
-                Node = i;
+                minDistNode = i;
             }
         }
 
-        return Node;
+        return minDistNode;
     }
 
     public static void main(String[] args) {
-        // Example graph adjacency matrix representation
-        int[][] graph = {
-                {0, 4, 0, 0, 0, 0, 0, 8, 0},
-                {4, 0, 8, 0, 0, 0, 0, 11, 0},
-                {0, 8, 0, 7, 0, 4, 0, 0, 2},
-                {0, 0, 7, 0, 9, 14, 0, 0, 0},
-                {0, 0, 0, 9, 0, 10, 0, 0, 0},
-                {0, 0, 4, 14, 10, 0, 2, 0, 0},
-                {0, 0, 0, 0, 0, 2, 0, 1, 6},
-                {8, 11, 0, 0, 0, 0, 1, 0, 7},
-                {0, 0, 2, 0, 0, 0, 6, 7, 0}
-        };
+        Scanner scanner = new Scanner(System.in);
 
-        int startNode = 0; // Starting node for Dijkstra's algorithm
+        // Get the number of nodes
+        System.out.print("Enter the number of nodes: ");
+        int numNodes = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
 
+        // Create the graph adjacency matrix
+        int[][] graph = new int[numNodes][numNodes];
+
+        // Get the adjacency matrix from the user
+        System.out.println("Enter the adjacency matrix:");
+        for (int i = 0; i < numNodes; i++) {
+            for (int j = 0; j < numNodes; j++) {
+                graph[i][j] = scanner.nextInt();
+            }
+            scanner.nextLine(); // Consume the newline character
+        }
+
+        // Get the starting node
+        System.out.print("Enter the starting node: ");
+        int startNode = scanner.nextInt();
+
+        // Run Dijkstra's algorithm
         dijkstra(graph, startNode);
     }
 }
